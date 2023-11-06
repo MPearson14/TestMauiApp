@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dataTemplateSelector="clr-namespace:TestMauiApp.Views.TemplateSelectors;assembly=TestMauiApp"
+             x:Class="TestMauiApp.DetailPage"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="True"
+             xmlns:viewmodels="clr-namespace:TestMauiApp.ViewModels"
+             x:DataType="viewmodels:DetailViewModel"
+             x:Name="DetailViewPage">
+    
+    <ContentPage.Resources>
+        <DataTemplate x:Key="CarouselTypeTemplate" x:DataType="viewmodels:DetailViewModel">
+                <Grid Margin="38, 0, 38, 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Text="Type" HorizontalOptions="Center" />
+
+                <VerticalStackLayout Grid.Row="1">
+                        <RadioButton Content="Button 1" IsChecked="True" CheckedChanged="RadioButton1_CheckedChanged" />
+                        <RadioButton Content="Button 2" IsChecked="False" CheckedChanged="RadioButton2_CheckedChanged" />
+                        <RadioButton Content="Button 3" IsChecked="False" CheckedChanged="RadioButton3_CheckedChanged" />
+                    </VerticalStackLayout>
+                </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="CarouselSearchTemplate" x:DataType="viewmodels:DetailViewModel">
+            <Grid AutomationId="SearchContainer">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Label     
+                    Grid.Row="0"
+                    Text="Details"
+                    VerticalOptions="Start"
+                    HorizontalOptions="Center" />
+
+                <ScrollView Grid.Row="1">
+                    <FlexLayout
+                        Margin="0, 38, 60, 38"
+                        Direction="Column"
+                        FlexLayout.AlignItems="{OnIdiom Desktop='Center', Tablet='Stretch', Phone='Stretch'}">
+
+                        <Label AutomationId="button1Heading" 
+                               Text="Button 1 Heading"
+                               IsVisible="{Binding BindingContext.IsButton1DetailsVisible, Source={x:Reference DetailViewPage}}" />
+
+                        <Entry AutomationId="button1Entry" 
+                               IsVisible="{Binding BindingContext.IsButton1DetailsVisible, Source={x:Reference DetailViewPage}}" 
+                               Placeholder="Button 1 Entry" />
+
+                        <Label AutomationId="button2Heading" 
+                               Text="Button 2 Heading" 
+                               IsVisible="{Binding BindingContext.IsButton2DetailsVisible, Source={x:Reference DetailViewPage}}" />
+
+                        <Entry AutomationId="button2Entry" 
+                               IsVisible="{Binding BindingContext.IsButton2DetailsVisible, Source={x:Reference DetailViewPage}}"
+                               Placeholder="Button 2 Entry" />
+
+                        <Label AutomationId="button3Heading" 
+                               Text="Button 3 Heading" 
+                               IsVisible="{Binding BindingContext.IsButton3DetailsVisible, Source={x:Reference DetailViewPage}}" />
+
+                        <Entry AutomationId="button3Entry" 
+                               IsVisible="{Binding BindingContext.IsButton3DetailsVisible, Source={x:Reference DetailViewPage}}"
+                               Placeholder="Button 3 Entry"/>
+                    </FlexLayout>
+                </ScrollView>
+
+                <FlexLayout Grid.Row="2"
+                    Direction="Column"
+                    JustifyContent="Start"
+                    Margin="30, 20, 38, 20"
+                    FlexLayout.AlignItems="{OnIdiom Desktop='Center', Tablet='Center', Phone='Stretch'}">
+
+                    <Button Text="Submit" />
+                </FlexLayout>
+            </Grid>
+        </DataTemplate>
+
+        <dataTemplateSelector:DetailDataTemplateSelector x:Key="CarouselSelector"
+                                                           TypeStep="{StaticResource CarouselTypeTemplate}"
+                                                           SearchStep="{StaticResource CarouselSearchTemplate}">
+        </dataTemplateSelector:DetailDataTemplateSelector>
+    </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <VerticalStackLayout HorizontalOptions="Fill" VerticalOptions="Fill">
+            <Label                         
+            Text="Test"
+            TextColor="{StaticResource WhiteColor}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            LineBreakMode="NoWrap"
+            Margin="10, 10, 10, 10" />
+        </VerticalStackLayout>
+    </Shell.TitleView>
+
+    <ContentPage.Content>              
+        <Grid>
+            <Grid Margin="0, 20, 0, 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="9*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+
+                <CarouselView Grid.Row="0" x:Name="CarouselControl" ItemsSource="{Binding CarouselData}" ItemTemplate="{StaticResource CarouselSelector}"
+                              AutomationId="carouselControl" Loop="False" IndicatorView="indicatorView" VerticalOptions="StartAndExpand">
+                </CarouselView>
+
+                <IndicatorView x:Name="indicatorView" Grid.Row="1" IndicatorColor="LightGray" SelectedIndicatorColor="DarkGray" 
+                               HorizontalOptions="Center" VerticalOptions="Fill" IndicatorSize="8.0" AutomationId="carouselIndicator"/>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+
+</ContentPage>
